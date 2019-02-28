@@ -1,19 +1,20 @@
 <template>
   <div id="app">
     <main>
-      <AddTodo v-on:add-todo="addTodo" />
+      <AddTodo @add-todo="addTodo" />
       <Todos
-        v-bind:todos="todos"
-        v-on:del-todo="deleteTodo"
+        :todos="todos"
+        @del-todo="deleteTodo"
       />
     </main>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 import AddTodo from '../components/AddTodo';
 import Todos from '../components/Todos';
-import axios from 'axios';
 
 export default {
   name: 'Home',
@@ -24,13 +25,22 @@ export default {
   data() {
     return {
       todos: [],
-    }
+    };
+  },
+  created() {
+    axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5')
+      .then((res) => {
+        this.todos = res.data;
+      })
+      .catch(err => console.error(err)); // eslint-disable-line no-console
   },
   methods: {
     deleteTodo(id) {
       axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
-        .then(res => this.todos = this.todos.filter(todo => todo.id !== id))
-        .catch(err => console.error(err));
+        .then(() => {
+          this.todos = this.todos.filter(todo => todo.id !== id);
+        })
+        .catch(err => console.error(err)); // eslint-disable-line no-console
     },
     addTodo(newTodo) {
       const { title, completed } = newTodo;
@@ -39,16 +49,13 @@ export default {
         title,
         completed,
       })
-        .then(res => this.todos = [ ...this.todos, res.data])
-        .catch(err => console.error(err));
-    }
+        .then((res) => {
+          this.todos = [...this.todos, res.data];
+        })
+        .catch(err => console.error(err)); // eslint-disable-line no-console
+    },
   },
-  created() {
-    axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5')
-      .then(res => this.todos = res.data)
-      .catch(err => console.error(err));
-  }
-}
+};
 </script>
 
 <style scoped>

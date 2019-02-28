@@ -4,17 +4,17 @@
   >
     <input
       type="checkbox"
-      v-on:change="markComplete"
-      v-bind:checked="todo.completed"
+      :checked="todo.completed"
+      @change="markComplete"
     >
     <p
-      v-bind:class="{'is-complete': todo.completed}"
+      :class="{'is-complete': todo.completed}"
     >
-      {{todo.title}}
+      {{ todo.title }}
     </p>
     <button
-      @click="$emit('del-todo', todo.id)"
       class="del"
+      @click="$emit('del-todo', todo.id)"
     >
       X
     </button>
@@ -23,14 +23,21 @@
 
 <script>
 export default {
-  name: "TodoItem",
-  props: ["todo"],
+  name: 'TodoItem',
+  props: {
+    todo: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+  },
   methods: {
     markComplete() {
-      this.todo.completed = ! this.todo.completed;
-    }
-  }
-}
+      this.todo.completed = !this.todo.completed;
+    },
+  },
+};
 </script>
 
 <style scoped>
