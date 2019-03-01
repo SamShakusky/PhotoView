@@ -1,14 +1,11 @@
 <template>
-  <div>
-    <div
+  <div class="todo-list">
+    <TodoItem
       v-for="todo in todos"
       :key="todo.id"
-    >
-      <TodoItem
-        :todo="todo"
-        @del-todo="$emit('del-todo', todo.id)"
-      />
-    </div>
+      :todo="todo"
+      @del-todo="$emit('del-todo', todo.id)"
+    />
   </div>
 </template>
 
@@ -16,7 +13,7 @@
 import TodoItem from './TodoItem';
 
 export default {
-  name: 'Todos',
+  name: 'TodoList',
   components: {
     TodoItem,
   },
@@ -30,7 +27,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-
-</style>

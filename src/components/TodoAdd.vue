@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="todo-add">
     <form @submit="addTodo">
       <input
         v-model="title"
@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: 'AddTodo',
+  name: 'TodoAdd',
   data() {
     return {
       title: '',
