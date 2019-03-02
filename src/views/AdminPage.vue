@@ -1,17 +1,13 @@
 <template>
   <main>
-    <TodoAdapter />
+    <p>Admin Page</p>
   </main>
 </template>
 
 <script>
-import TodoAdapter from '../components/TodoAdapter';
 
 export default {
-  name: 'Home',
-  components: {
-    TodoAdapter,
-  },
+  name: 'AdminPage',
 };
 </script>
 
