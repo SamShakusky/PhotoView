@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import todoModule from './modules/todo';
+import photoModule from './modules/photo';
 
 Vue.use(Vuex);
 
@@ -10,6 +11,7 @@ const store = new Vuex.Store({
   
   modules: {
     todo: todoModule,
+    photo: photoModule,
   },
 });
 

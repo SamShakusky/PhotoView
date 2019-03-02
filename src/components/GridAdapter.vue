@@ -1,11 +1,12 @@
 <template>
   <div class="grid-adapter">
     <GridContainer>
-      <GridItem>
-        1
-      </GridItem>
-      <GridItem>
-        2
+      <GridItem
+        v-for="photo in photos"
+        :key="photo.id"
+        :height="photo.height"
+      >
+        {{ photo.id + 1 }}
       </GridItem>
     </GridContainer>
   </div>
@@ -20,6 +21,11 @@ export default {
   components: {
     GridContainer,
     GridItem,
+  },
+  computed: {
+    photos() {
+      return this.$store.state.photo.data;
+    },
   },
 };
 </script>
