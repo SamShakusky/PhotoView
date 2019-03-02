@@ -1,21 +1,16 @@
 <template>
   <main>
-    <p>Some photos here</p>
+    <GridAdapter />
   </main>
 </template>
 
 <script>
+import GridAdapter from '../components/GridAdapter';
 
 export default {
   name: 'HomePage',
+  components: {
+    GridAdapter,
+  },
 };
 </script>
-
-<style scoped>
-  main {
-    display: flex;
-    flex-direction: column;
-    max-width: 500px;
-    margin: 80px auto;
-  }
-</style>

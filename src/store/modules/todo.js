@@ -1,11 +1,7 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
 import axios from 'axios';
 
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
-  strict: process.env.NODE_ENV !== 'production',
+const todoModule = {
+  namespaced: true,
   
   state: {
     todos: [],
@@ -64,6 +60,6 @@ const store = new Vuex.Store({
         .catch(err => console.error(err)); // eslint-disable-line no-console
     },
   },
-});
+};
 
-export default store;
+export default todoModule;

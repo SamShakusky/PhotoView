@@ -9,10 +9,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { createNamespacedHelpers } from 'vuex';
 
 import TodoAdd from './TodoAdd';
 import TodoList from './TodoList';
+
+const { mapActions, mapGetters } = createNamespacedHelpers('todo');
 
 export default {
   name: 'TodoAdapter',
@@ -24,7 +26,7 @@ export default {
   
   computed: {
     todos() {
-      return this.$store.state.todos;
+      return this.$store.state.todo.todos;
     },
     ...mapGetters([
       'niceTodos',
@@ -32,7 +34,7 @@ export default {
   },
   
   created() {
-    this.$store.dispatch('getTodos');
+    this.$store.dispatch('todo/getTodos');
   },
   
   methods: {
