@@ -18,4 +18,5 @@ export default new Router({
       component: About,
     },
   ],
+  mode: 'history',
 });
