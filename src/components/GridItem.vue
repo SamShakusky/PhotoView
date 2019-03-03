@@ -6,6 +6,7 @@
   >
     <div
       ref="content"
+      class="grid-item-content"
       :style="styleObjContent"
     >
       <slot />
@@ -16,31 +17,36 @@
 <script>
 export default {
   name: 'GridItem',
+  
   props: {
     height: {
       type: Number,
       default: 0,
     },
   },
+  
   data() {
     return {
       styleObjItem: {},
-      styleObjContent: {
-        height: `${this.height}px`,
-      },
+      styleObjContent: {},
     };
   },
+  
   mounted() {
-    this.getHeight();
+    setTimeout(this.getHeight, 3000);
   },
+  
   methods: {
     getHeight() {
-      const height = this.$refs.content.clientHeight;
-      const rowSpan = Math.ceil((height + 10) / (120 + 10));
+      const contentHeight = this.$refs.content.clientHeight;
+      const rowSpan = Math.ceil((contentHeight + 10) / 10);
       
       this.styleObjItem = {
-        ...this.styleObj,
         gridRowEnd: `span ${rowSpan}`,
+      };
+      
+      this.styleObjContent = {
+        height: '100%',
       };
     },
   },
@@ -49,8 +55,11 @@ export default {
 
 <style scoped>
   .grid-item {
-    border: 1px solid steelblue;
     min-height: 50px;
     min-width: 50px;
+  }
+  
+  .grid-item-content {
+    overflow: hidden;
   }
 </style>
