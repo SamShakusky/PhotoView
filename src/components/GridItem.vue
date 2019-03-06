@@ -9,7 +9,10 @@
       class="grid-item-content"
       :style="styleObjContent"
     >
-      <slot />
+      <slot
+        name="item"
+        :signal="getHeight"
+      />
     </div>
   </div>
 </template>
@@ -18,27 +21,22 @@
 export default {
   name: 'GridItem',
   
-  props: {
-    height: {
-      type: Number,
-      default: 0,
-    },
-  },
-  
   data() {
     return {
       styleObjItem: {},
       styleObjContent: {},
+      // parentVal: () => console.log('ass'),
     };
   },
   
   mounted() {
-    setTimeout(this.getHeight, 3000);
+    // setTimeout(this.getHeight, 3000);
+    // this.getHeight();
   },
   
   methods: {
-    getHeight() {
-      const contentHeight = this.$refs.content.clientHeight;
+    getHeight(el) {
+      const contentHeight = el.clientHeight;
       const rowSpan = Math.ceil((contentHeight + 10) / 10);
       
       this.styleObjItem = {
