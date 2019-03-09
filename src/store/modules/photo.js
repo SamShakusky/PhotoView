@@ -1,4 +1,4 @@
-// import axios from 'axios';
+import axios from 'axios';
 
 const photoModule = {
   namespaced: true,
@@ -78,24 +78,52 @@ const photoModule = {
       //   post_url: 'https://picsum.photos/1024/768/',
       // },
     ],
+    temp: [],
   },
     
   /* eslint-disable no-param-reassign */
   mutations: {
     getPhotos: (state, payload) => {
-      state.data = payload;
+      state.temp = payload;
+    },
+    addPhoto: (state, newPhoto) => {
+      state.temp = [...state.temp, newPhoto];
+    },
+    deletePhoto: (state, filteredList) => {
+      state.temp = filteredList;
     },
   },
   /* eslint-enable no-param-reassign */
   
   actions: {
-    // getPhotos: (context) => {
-    //   axios.get('https://picsum.photos/list')
-    //     .then((res) => {
-    //       // context.commit('getPhotos', res.data.slice(0, 8));
-    //     })
-    //     .catch(err => console.error(err)); // eslint-disable-line no-console
-    // },
+    getPhotos: (context) => {
+      axios.get('/api/photo/')
+        .then((res) => {
+          context.commit('getPhotos', res.data);
+        })
+        .catch(err => console.error(err)); // eslint-disable-line no-console
+    },
+    addPhoto: (context, payload) => {
+      const { description } = payload;
+      
+      axios.post('/api/photo/', {
+        description,
+      })
+        .then((res) => {
+          context.commit('addPhoto', res.data);
+        })
+        .catch(err => console.error(err)); // eslint-disable-line no-console
+    },
+    deletePhoto: (context, payload) => {
+      const { id } = payload;
+      
+      axios.delete(`/api/photo/${id}`)
+        .then(() => {
+          const filteredList = context.state.temp.filter(photo => photo.id !== id);
+          context.commit('deletePhoto', filteredList);
+        })
+        .catch(err => console.error(err)); // eslint-disable-line no-console
+    },
   },
 };
 

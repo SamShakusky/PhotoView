@@ -25,7 +25,6 @@ export default {
     return {
       styleObjItem: {},
       styleObjContent: {},
-      // parentVal: () => console.log('ass'),
     };
   },
   
