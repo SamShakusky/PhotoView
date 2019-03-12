@@ -3,6 +3,7 @@
     :data-src="lazySrc"
     :data-srcset="lazySrcset"
     :style="style"
+    :title="description"
     class="AppImage"
   >
 </template>
@@ -43,6 +44,10 @@ export default {
     signal: {
       type: Function,
       default: null,
+    },
+    description: {
+      type: String,
+      default: '',
     },
   },
   
@@ -107,6 +112,10 @@ export default {
     // element of our component.
     const observer = lozad(this.$el, {
       loaded: (el) => {
+        // el.onload = function () {
+        //   console.log(el);
+        //   this.signal(el);
+        // };
         onLoad(el, () => this.signal(el));
       },
     });

@@ -15,8 +15,8 @@ export default {
     max-width: 1200px;
     margin: auto;
     display: grid;
-    grid-gap: 10px;
+    grid-gap: 6px;
     grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
-    grid-auto-rows: 1px;
+    grid-auto-rows: 0px;
   }
 </style>

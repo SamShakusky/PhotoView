@@ -4,22 +4,14 @@
       <GridItem
         v-for="photo in photos"
         :key="photo.id"
-        :height="photo.height"
       >
-        <!-- {{ photo.id + 1 }} -->
-        <!-- <img :src="photo.post_url"> -->
-        <!-- <AppImage
-          :height="200"
-          :background-color="'#b0897e'"
-          :src="photo.post_url"
-          scope="{formData}"
-        /> -->
         <template
           slot="item"
-          scope="props"
+          slot-scope="props"
         >
           <AppImage
-            :data-src="photo.post_url"
+            :data-src="photo.url"
+            :description="photo.description"
             :signal="props.signal"
             :height="300"
           />
@@ -51,7 +43,7 @@ export default {
   },
   
   created() {
-    // this.$store.dispatch('photo/getPhotos');
+    this.$store.dispatch('photo/getPhotos');
   },
 };
 </script>

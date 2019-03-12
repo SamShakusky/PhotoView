@@ -36,7 +36,7 @@ export default {
   methods: {
     getHeight(el) {
       const contentHeight = el.clientHeight;
-      const rowSpan = Math.ceil((contentHeight + 10) / 10);
+      const rowSpan = Math.ceil((contentHeight) / 6);
       
       this.styleObjItem = {
         gridRowEnd: `span ${rowSpan}`,
