@@ -1,16 +1,18 @@
 <template>
-  <div id="app">
+  <v-app>
     <Header />
     <router-view />
-  </div>
+  </v-app>
 </template>
 
 <script>
+import { VApp } from 'vuetify/lib';
 import Header from './components/layout/Header';
 
 export default {
   name: 'App',
   components: {
+    VApp,
     Header,
   },
 };
