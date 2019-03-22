@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@vue/eslint-config-airbnb": "^4.0.0",
+    "@mdi/font": "^3.5.95",
     "axios": "^0.18.0",
     "lozad": "^1.9.0",
     "uuid": "^3.3.2",
