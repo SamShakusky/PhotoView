@@ -11,7 +11,7 @@
           </span>
         </td>
         <td>{{ props.item.description }}</td>
-        <td>{{ props.item.created_date }}</td>
+        <td>{{ formatDate(props.item.created_date) }}</td>
         <td>{{ props.item.id }}</td>
       </tr>
     </template>
@@ -65,6 +65,19 @@ export default {
   methods: {
     editPhoto(id) {
       this.$emit('editPhoto', id);
+    },
+    
+    formatDate(date) {
+      const formated = new Date(date);
+      const options = {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit',
+        hour: 'numeric',
+        minute: 'numeric',
+      };
+      
+      return formated.toLocaleString('ru-RU', options);
     },
   },
 };
