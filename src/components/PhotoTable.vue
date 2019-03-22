@@ -1,33 +1,35 @@
 <template>
-  <table>
-    <thead>
-      <td>Id</td>
-      <td>URL</td>
-      <td>Description</td>
-      <td>Created</td>
-      <td />
-    </thead>
-    <tbody>
-      <PhotoTableRow
-        v-for="photo in photos"
-        :id="photo.id"
-        :key="photo.id"
-        :url="photo.url"
-        :description="photo.description"
-        :created_date="photo.created_date"
+  <v-data-table
+    :headers="headers"
+    :items="photos"
+  >
+    <template v-slot:items="props">
+      <!--
         @deletePhoto="$emit('deletePhoto', photo.id)"
-      />
-    </tbody>
-  </table>
+      /> -->
+      <tr @click="editPhoto(props.item.id)">
+        <td>
+          <span>
+            <img :src="props.item.url">
+          </span>
+        </td>
+        <td>{{ props.item.description }}</td>
+        <td>{{ props.item.created_date }}</td>
+        <td>{{ props.item.id }}</td>
+      </tr>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
-import PhotoTableRow from './PhotoTableRow';
+import { VDataTable, VEditDialog, VTextField } from 'vuetify/lib';
 
 export default {
   name: 'PhotoTable',
   components: {
-    PhotoTableRow,
+    VDataTable,
+    VEditDialog,
+    VTextField,
   },
   props: {
     photos: {
@@ -35,6 +37,33 @@ export default {
       default() {
         return [];
       },
+    },
+  },
+  data() {
+    return {
+      headers: [
+        {
+          text: 'Url',
+          value: 'url',
+        },
+        {
+          text: 'Description',
+          value: 'description',
+        },
+        {
+          text: 'Created',
+          value: 'created',
+        },
+        {
+          text: 'Id',
+          value: 'id',
+        },
+      ],
+    };
+  },
+  methods: {
+    editPhoto(id) {
+      this.$emit('editPhoto', id);
     },
   },
 };
@@ -48,5 +77,17 @@ export default {
   
   thead {
     font-weight: bold;
+  }
+  
+  span {
+    height: 100px;
+    width: 100px;
+    display: block;
+  }
+  
+  img {
+    object-fit: cover;
+    height: 100px;
+    width: 100px;
   }
 </style>
