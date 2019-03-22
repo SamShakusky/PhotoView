@@ -4,9 +4,6 @@
     :items="photos"
   >
     <template v-slot:items="props">
-      <!--
-        @deletePhoto="$emit('deletePhoto', photo.id)"
-      /> -->
       <tr @click="editPhoto(props.item.id)">
         <td>
           <span>
@@ -22,15 +19,17 @@
 </template>
 
 <script>
-import { VDataTable, VEditDialog, VTextField } from 'vuetify/lib';
+import {
+  VDataTable,
+} from 'vuetify/lib';
 
 export default {
   name: 'PhotoTable',
+  
   components: {
     VDataTable,
-    VEditDialog,
-    VTextField,
   },
+  
   props: {
     photos: {
       type: Array,
@@ -39,6 +38,7 @@ export default {
       },
     },
   },
+  
   data() {
     return {
       headers: [
@@ -61,6 +61,7 @@ export default {
       ],
     };
   },
+  
   methods: {
     editPhoto(id) {
       this.$emit('editPhoto', id);

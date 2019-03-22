@@ -1,7 +1,7 @@
 <template>
   <div class="photo-adapter">
     <v-btn
-      @click="openDialog"
+      @click.stop="openDialog()"
     >
       Add Photo
     </v-btn>
@@ -10,7 +10,7 @@
       :edited-photo="editedPhoto"
       :dialog-title="dialogTitle"
       @closeDialog="closeDialog"
-      @addPhoto="addPhoto"
+      @sendPhoto="sendPhoto"
     />
     <PhotoTable
       :photos="photos"
@@ -32,33 +32,36 @@ const defaultPhoto = {
 };
 
 export default {
-  name: 'AdminPage',
+  name: 'PhotoAdapter',
+  
   components: {
     VBtn,
     PhotoForm,
     PhotoTable,
   },
+  
   data() {
     return {
       dialog: false,
       editedPhoto: defaultPhoto,
-      dialogTitle: '',
+      dialogTitle: 'Add Photo',
     };
   },
+  
   computed: {
     photos() {
       return this.$store.state.photo.data;
     },
   },
+  
   created() {
     this.$store.dispatch('photo/getPhotos');
   },
+  
   methods: {
-    addPhoto(newPhoto) {
-      this.$store.dispatch('photo/addPhoto', newPhoto);
-      
-      this.url = '';
-      this.description = '';
+    sendPhoto(photo) {
+      // this.$store.dispatch('photo/addPhoto', photo);
+      console.log('1111', photo);
     },
     
     openDialog(photoId) {
