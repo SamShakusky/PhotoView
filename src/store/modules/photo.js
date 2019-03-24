@@ -59,7 +59,7 @@ const photoModule = {
     deletePhoto: (context, payload) => {
       const { id } = payload;
       
-      axios.delete(`/api/photo/${id}`)
+      axios.delete(`/api/photo/${id}/`)
         .then(() => {
           const filteredList = context.state.data.filter(photo => photo.id !== id);
           context.commit('deletePhoto', filteredList);

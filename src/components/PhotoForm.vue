@@ -2,7 +2,7 @@
   <div
     class="dialog-overlay"
     :class="{'active': dialog}"
-    @click="close"
+    @click="closeDialog"
   >
     <v-dialog
       v-model="dialog"
@@ -11,6 +11,19 @@
       :persistent="true"
     >
       <v-card>
+        <v-btn
+          flat
+          icon
+          color="error"
+          class="delete-btn"
+          :class="{'visible': editItem.id}"
+          :absolute="true"
+          @click="deletePhoto"
+        >
+          <v-icon small>
+            mdi-delete
+          </v-icon>
+        </v-btn>
         <v-card-title>
           <span class="headline">{{ dialogTitle }}</span>
         </v-card-title>
@@ -30,14 +43,14 @@
           <v-btn
             color="blue darken-1"
             flat
-            @click="close"
+            @click="closeDialog"
           >
             Cancel
           </v-btn>
           <v-btn
             color="blue darken-1"
             flat
-            @click="save"
+            @click="savePhoto"
           >
             Save
           </v-btn>
@@ -56,6 +69,7 @@ import {
   VCardActions,
   VTextField,
   VBtn,
+  VIcon,
 } from 'vuetify/lib';
 
 export default {
@@ -69,6 +83,7 @@ export default {
     VCardActions,
     VTextField,
     VBtn,
+    VIcon,
   },
   
   props: {
@@ -97,16 +112,27 @@ export default {
   },
   
   methods: {
-    save() {
+    savePhoto() {
       const editPhoto = {
         ...this.editItem,
       };
       
       this.$emit('sendPhoto', editPhoto);
+      this.closeDialog();
     },
     
-    close() {
+    closeDialog() {
       this.$emit('closeDialog');
+    },
+    
+    deletePhoto() {
+      // eslint-disable-next-line
+      const conf = confirm('Are you sure? You won\'t be able to undo this action.');
+      
+      if (conf) {
+        this.$emit('deletePhoto', this.editItem.id);
+        this.closeDialog();
+      }
     },
   },
 };
@@ -128,5 +154,22 @@ export default {
   .dialog-overlay.active {
     opacity: 1;
     pointer-events: auto;
+  }
+  
+  .v-card {
+    padding: 4px 8px;
+  }
+  
+  .v-card__actions {
+    justify-content: flex-end;
+  }
+  
+  .delete-btn {
+    top: 18px;
+    right: 24px;
+    display: none;
+  }
+  .delete-btn.visible {
+    display: inline-flex;
   }
 </style>

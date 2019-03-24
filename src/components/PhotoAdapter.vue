@@ -9,13 +9,13 @@
       :dialog="dialog"
       :edited-photo="editedPhoto"
       :dialog-title="dialogTitle"
-      @closeDialog="closeDialog"
       @sendPhoto="sendPhoto"
+      @closeDialog="closeDialog"
+      @deletePhoto="deletePhoto"
     />
     <PhotoTable
       :photos="photos"
       @editPhoto="openDialog"
-      @deletePhoto="deletePhoto"
     />
   </div>
 </template>
@@ -70,15 +70,16 @@ export default {
         editedPhoto = this.photos.find(x => x.id === photoId);
         this.editedPhoto = editedPhoto;
         this.dialogTitle = 'Edit Photo';
+      } else {
+        this.editedPhoto = defaultPhoto;
+        this.dialogTitle = 'Add Photo';
       }
       
       this.dialog = true;
     },
     
     closeDialog() {
-      this.editedPhoto = defaultPhoto;
       this.dialog = false;
-      this.dialogTitle = 'Add Photo';
     },
     
     deletePhoto(id) {

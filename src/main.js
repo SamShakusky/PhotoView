@@ -3,9 +3,9 @@ import Vuetify from 'vuetify';
 import App from './App';
 import router from './router';
 
+import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/src/stylus/app.styl';
 import 'vuetify/dist/vuetify.min.css';
-import '@mdi/font/css/materialdesignicons.css';
 
 import store from './store';
 
