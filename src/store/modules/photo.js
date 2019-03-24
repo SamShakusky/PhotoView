@@ -12,8 +12,15 @@ const photoModule = {
     getPhotos: (state, payload) => {
       state.data = payload;
     },
-    addPhoto: (state, newPhoto) => {
-      state.data = [...state.data, newPhoto];
+    setPhoto: (state, payload) => {
+      if (payload.id) {
+        const index = state.data.findIndex(photo => photo.id === payload.id);
+        Object.keys(state.data[index]).forEach((key) => {
+          state.data[index][key] = payload.data[key];
+        });
+      } else {
+        state.data = [...state.data, payload.data];
+      }
     },
     deletePhoto: (state, filteredList) => {
       state.data = filteredList;
@@ -29,16 +36,25 @@ const photoModule = {
         })
         .catch(err => console.error(err)); // eslint-disable-line no-console
     },
-    addPhoto: (context, payload) => {
-      const { url, description } = payload;
+    setPhoto: (context, photoData) => {
+      let photoId = '';
+      let method = 'POST';
       
-      axios.post('/api/photo/', {
-        url, description,
-      })
-        .then((res) => {
-          context.commit('addPhoto', res.data);
-        })
-        .catch(err => console.error(err)); // eslint-disable-line no-console
+      if (photoData.id) {
+        photoId = `${photoData.id}/`;
+        method = 'PUT';
+      }
+      
+      axios({
+        method,
+        url: `/api/photo/${photoId}`,
+        data: photoData,
+      }).then((res) => {
+        context.commit('setPhoto', {
+          id: photoData.id,
+          data: res.data,
+        });
+      }).catch(err => console.error(err)); // eslint-disable-line no-console
     },
     deletePhoto: (context, payload) => {
       const { id } = payload;

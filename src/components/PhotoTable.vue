@@ -1,7 +1,9 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="photos"
+    :items="photosComp"
+    :rows-per-page-items="[15,30,60]"
+    :disable-initial-sort="true"
   >
     <template v-slot:items="props">
       <tr @click="editPhoto(props.item.id)">
@@ -34,7 +36,7 @@ export default {
     photos: {
       type: Array,
       default() {
-        return [];
+        return null;
       },
     },
   },
@@ -59,7 +61,14 @@ export default {
           value: 'id',
         },
       ],
+      photoShit: this.photos,
     };
+  },
+  
+  computed: {
+    photosComp() {
+      return this.photos;
+    },
   },
   
   methods: {

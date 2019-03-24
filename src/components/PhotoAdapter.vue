@@ -60,13 +60,12 @@ export default {
   
   methods: {
     sendPhoto(photo) {
-      // this.$store.dispatch('photo/addPhoto', photo);
-      console.log('1111', photo);
+      this.$store.dispatch('photo/setPhoto', photo);
     },
     
     openDialog(photoId) {
       let editedPhoto;
-      console.log(photoId);
+      
       if (photoId) {
         editedPhoto = this.photos.find(x => x.id === photoId);
         this.editedPhoto = editedPhoto;
