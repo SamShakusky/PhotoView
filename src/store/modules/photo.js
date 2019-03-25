@@ -39,6 +39,16 @@ const photoModule = {
     setPhoto: (context, photoData) => {
       let photoId = '';
       let method = 'POST';
+      const snackData = {
+        success: {
+          text: 'The photo is successfully saved',
+          color: 'success',
+        },
+        error: {
+          text: 'The photo was not saved. Try again',
+          color: 'error',
+        },
+      };
       
       if (photoData.id) {
         photoId = `${photoData.id}/`;
@@ -55,22 +65,33 @@ const photoModule = {
           data: res.data,
         });
         
-        const snackData = {
-          text: 'The photo was successfully saved',
-          color: 'success',
-        };
-        context.commit('snack/toggleSnack', snackData, { root: true });
-      }).catch(err => console.error(err)); // eslint-disable-line no-console
+        context.commit('snack/toggleSnack', snackData.success, { root: true });
+      }).catch(() => {
+        context.commit('snack/toggleSnack', snackData.error, { root: true });
+      });
     },
     deletePhoto: (context, payload) => {
       const { id } = payload;
+      const snackData = {
+        success: {
+          text: 'The photo is successfully deleted',
+          color: 'success',
+        },
+        error: {
+          text: 'The photo was not deleted. Try again',
+          color: 'error',
+        },
+      };
       
       axios.delete(`/api/photo/${id}/`)
         .then(() => {
           const filteredList = context.state.data.filter(photo => photo.id !== id);
           context.commit('deletePhoto', filteredList);
+          context.commit('snack/toggleSnack', snackData.success, { root: true });
         })
-        .catch(err => console.error(err)); // eslint-disable-line no-console
+        .catch(() => {
+          context.commit('snack/toggleSnack', snackData.error, { root: true });
+        });
     },
   },
 };
