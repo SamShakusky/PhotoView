@@ -2,18 +2,21 @@
   <v-app>
     <Header />
     <router-view />
+    <SnackAdapter />
   </v-app>
 </template>
 
 <script>
 import { VApp } from 'vuetify/lib';
 import Header from './components/layout/Header';
+import SnackAdapter from './components/SnackAdapter';
 
 export default {
   name: 'App',
   components: {
     VApp,
     Header,
+    SnackAdapter,
   },
 };
 </script>

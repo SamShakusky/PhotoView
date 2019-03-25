@@ -54,6 +54,12 @@ const photoModule = {
           id: photoData.id,
           data: res.data,
         });
+        
+        const snackData = {
+          text: 'The photo was successfully saved',
+          color: 'success',
+        };
+        context.commit('snack/toggleSnack', snackData, { root: true });
       }).catch(err => console.error(err)); // eslint-disable-line no-console
     },
     deletePhoto: (context, payload) => {
