@@ -4,6 +4,7 @@
     :items="photosComp"
     :rows-per-page-items="[15,30,60]"
     :disable-initial-sort="true"
+    class="table"
   >
     <template v-slot:items="props">
       <tr @click="editPhoto(props.item.id)">
@@ -93,13 +94,16 @@ export default {
 </script>
 
 <style scoped>
-  table {
-    border-spacing: 0;
-    margin-top: 24px;
+  .table {
+    width: 900px;
   }
   
   thead {
     font-weight: bold;
+  }
+  
+  tr {
+    cursor: pointer;
   }
   
   span {
@@ -109,8 +113,8 @@ export default {
   }
   
   img {
-    object-fit: cover;
-    height: 100px;
+    object-fit: contain;
+    height: 100%;
     width: 100px;
   }
 </style>

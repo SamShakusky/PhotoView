@@ -1,6 +1,7 @@
 <template>
   <div class="photo-adapter">
     <v-btn
+      color="primary"
       @click.stop="openDialog()"
     >
       Add Photo
