@@ -6,7 +6,7 @@
     :title="description"
     class="AppImage"
     :class="{'hidden': hidden}"
-    @click="$emit('click')"
+    @click="click"
   >
 </template>
 
@@ -23,6 +23,10 @@ export default {
   name: 'AppImage',
   
   props: {
+    id: {
+      type: String,
+      default: '',
+    },
     backgroundColor: {
       type: String,
       default: '#efefef',
@@ -98,6 +102,7 @@ export default {
       return style;
     },
   },
+  
   mounted() {
     // As soon as the <img> element triggers
     // the `load` event, the loading state is
@@ -126,6 +131,17 @@ export default {
       },
     });
     observer.observe();
+  },
+  
+  methods: {
+    click(e) {
+      const data = {
+        id: this.id,
+        sizes: e.currentTarget.getBoundingClientRect(),
+      };
+      
+      this.$emit('click', data);
+    },
   },
 };
 

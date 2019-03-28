@@ -15,14 +15,26 @@
       </v-icon>
     </v-btn>
     <div class="photo-wrap">
+      <div class="main-wrap">
+        <img
+          :src="item.url"
+          class="img-main"
+        >
+        <div
+          ref="cliche"
+          :style="divRect"
+        />
+      </div>
       <img
         :src="item.url"
-        class="img-main"
+        :style="rectStyles"
+        class="img-clone"
       >
     </div>
     <div class="descr-wrap" />
   </div>
 </template>
+
 
 <script>
 import {
@@ -49,17 +61,86 @@ export default {
       type: Boolean,
       default: () => false,
     },
+    gridImgRect: {
+      type: [DOMRect, Object],
+      default: () => undefined,
+    },
   },
   
   data() {
     return {
       loading: true,
+      computedStyles: {},
     };
+  },
+  
+  computed: {
+    rectStyles: {
+      get() {
+        if (!this.gridImgRect) {
+          return false;
+        }
+        
+        const {
+          left, top, height, width,
+        } = this.gridImgRect;
+        
+        return {
+          left: `${left}px`,
+          top: `${top}px`,
+          height: `${height}px`,
+          width: `${width}px`,
+          ...this.computedStyles,
+        };
+      },
+      
+      set(newVal) {
+        this.computedStyles = newVal;
+      },
+    },
+    
+    divRect() {
+      if (!this.gridImgRect) {
+        return false;
+      }
+      const { height, width } = this.gridImgRect;
+      
+      return {
+        height: `${height}px`,
+        width: `${width}px`,
+      };
+    },
+  },
+  
+  watch: {
+    active(newVal) {
+      if (!newVal) {
+        this.rectStyles = null;
+        return false;
+      }
+      
+      setTimeout(() => {
+        const clicheRect = this.$refs.cliche.getBoundingClientRect();
+        
+        const { x: cX, y: cY } = clicheRect;
+        const { x: gX, y: gY, height: gHeight } = this.gridImgRect;
+        
+        const newX = cX - gX;
+        const newY = cY - gY;
+        const scale = window.innerHeight / gHeight;
+        
+        this.rectStyles = {
+          transform: `translate3d(${newX}px, ${newY}px, 0) scale(${scale})`,
+        };
+      }, 100);
+      
+      return newVal;
+    },
   },
 };
 
-
 </script>
+
 
 <style scoped>
   .lightbox {
@@ -100,8 +181,30 @@ export default {
     background: lightcoral;
   }
   
+  .main-wrap {
+    position: relative;
+    /* z-index: 1; */
+  }
+  
+  .main-wrap > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
   .img-main {
     object-fit: contain;
     height: 100%;
+  }
+  
+  .img-clone {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: transform .5s, heigth .5s, width .5s;
+    object-fit: contain;
+    filter: grayscale();
+    opacity: .3;
   }
 </style>

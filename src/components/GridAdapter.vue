@@ -10,12 +10,13 @@
           slot-scope="props"
         >
           <AppImage
+            :id="photo.id"
             :data-src="photo.url"
             :description="photo.description"
             :signal="props.signal"
             :height="300"
             :hidden="activeItem.id && photo.id !== activeItem.id"
-            @click="hideItems(photo.id)"
+            @click="hideItems"
           />
         </template>
       </GridItem>
@@ -23,6 +24,7 @@
     <Lightbox
       :active="!! activeItem.id"
       :item="activeItem"
+      :grid-img-rect="imgRect"
       @close="showItems"
     />
   </div>
@@ -53,6 +55,7 @@ export default {
   data() {
     return {
       activeItem: defaultPhoto,
+      imgRect: {},
     };
   },
   
@@ -67,9 +70,11 @@ export default {
   },
   
   methods: {
-    hideItems(id) {
-      this.activeItem = this.photos.find(photo => photo.id === id);
+    hideItems(data) {
+      this.activeItem = this.photos.find(photo => photo.id === data.id);
+      this.imgRect = data.sizes;
     },
+    
     showItems() {
       this.activeItem = defaultPhoto;
     },
