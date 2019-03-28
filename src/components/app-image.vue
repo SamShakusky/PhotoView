@@ -5,6 +5,8 @@
     :style="style"
     :title="description"
     class="AppImage"
+    :class="{'hidden': hidden}"
+    @click="$emit('click')"
   >
 </template>
 
@@ -48,6 +50,10 @@ export default {
     description: {
       type: String,
       default: '',
+    },
+    hidden: {
+      type: Boolean,
+      default: false,
     },
   },
   
@@ -126,12 +132,19 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
   .AppImage {
     max-width: 100%;
     max-height: 100%;
     width: auto;
     height: auto;
     vertical-align: middle;
+    transition: opacity 0.5s cubic-bezier(0.7, 0, 0.3, 1) 12ms,
+                transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 12ms;
+  }
+  
+  .hidden {
+    transform: scale3d(0.1, 0.1, 1);
+    opacity: 0;
   }
 </style>

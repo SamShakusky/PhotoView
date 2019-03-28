@@ -14,18 +14,31 @@
             :description="photo.description"
             :signal="props.signal"
             :height="300"
+            :hidden="activeItem.id && photo.id !== activeItem.id"
+            @click="hideItems(photo.id)"
           />
         </template>
       </GridItem>
     </GridContainer>
+    <Lightbox
+      :active="!! activeItem.id"
+      :item="activeItem"
+      @close="showItems"
+    />
   </div>
 </template>
 
 <script>
 import GridContainer from './GridContainer';
 import GridItem from './GridItem';
+import Lightbox from './lightbox';
 
 import AppImage from './app-image';
+
+const defaultPhoto = {
+  url: null,
+  description: null,
+};
 
 export default {
   name: 'GridAdapter',
@@ -34,6 +47,13 @@ export default {
     GridContainer,
     GridItem,
     AppImage,
+    Lightbox,
+  },
+  
+  data() {
+    return {
+      activeItem: defaultPhoto,
+    };
   },
   
   computed: {
@@ -44,6 +64,15 @@ export default {
   
   created() {
     this.$store.dispatch('photo/getPhotos');
+  },
+  
+  methods: {
+    hideItems(id) {
+      this.activeItem = this.photos.find(photo => photo.id === id);
+    },
+    showItems() {
+      this.activeItem = defaultPhoto;
+    },
   },
 };
 </script>
