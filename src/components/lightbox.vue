@@ -115,7 +115,10 @@ export default {
   watch: {
     active(newVal) {
       if (!newVal) {
-        this.rectStyles = null;
+        this.rectStyles = {
+          transition: 'opacity .1s .5s, transform .5s, heigth .5s, width .5s',
+          opacity: '0',
+        };
         return false;
       }
       
@@ -146,18 +149,36 @@ export default {
   .lightbox {
     position: fixed;
     z-index: 100;
-    background: black;
     display: flex;
     height: 100vh;
     width: 100vw;
     top: 0;
     pointer-events: none;
-    opacity: 0;
+    /* opacity: 0; */
+  }
+  
+  .lightbox:before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    content: '';
+    height: 100%;
+    width: 100%;
+    transition: background .4s;
   }
   
   .lightbox.active {
     opacity: 1;
     pointer-events: auto;
+  }
+  
+  .lightbox.active:before {
+    background: white;
+  }
+  
+  .lightbox.active .img-main {
+    animation: mainImg .6s;
+    opacity: 1;
   }
   
   .close-btn {
@@ -172,18 +193,18 @@ export default {
   }
   
   .photo-wrap {
-    background: lightblue;
+    /* background: lightblue; */
     display: flex;
     justify-content: center;
   }
   
   .descr-wrap {
-    background: lightcoral;
+    /* background: lightcoral; */
   }
   
   .main-wrap {
     position: relative;
-    /* z-index: 1; */
+    z-index: 1;
   }
   
   .main-wrap > div {
@@ -196,6 +217,7 @@ export default {
   .img-main {
     object-fit: contain;
     height: 100%;
+    opacity: 0;
   }
   
   .img-clone {
@@ -205,6 +227,17 @@ export default {
     transition: transform .5s, heigth .5s, width .5s;
     object-fit: contain;
     filter: grayscale();
-    opacity: .3;
   }
+  
+  @keyframes mainImg {
+    0% { opacity: 0; }
+    99% { opacity: 0; }
+    100% { opacity: 1; }
+   }
+   
+   @keyframes cloneImg {
+    0% { opacity: 1; }
+    99% { opacity: 1; }
+    100% { opacity: 0; }
+   }
 </style>

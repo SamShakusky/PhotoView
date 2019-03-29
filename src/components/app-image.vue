@@ -5,7 +5,10 @@
     :style="style"
     :title="description"
     class="AppImage"
-    :class="{'hidden': hidden}"
+    :class="{
+      'hidden': hidden,
+      'active': active,
+    }"
     @click="click"
   >
 </template>
@@ -56,6 +59,10 @@ export default {
       default: '',
     },
     hidden: {
+      type: Boolean,
+      default: false,
+    },
+    active: {
       type: Boolean,
       default: false,
     },
@@ -150,17 +157,18 @@ export default {
 
 <style scoped>
   .AppImage {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    vertical-align: middle;
-    transition: opacity 0.5s cubic-bezier(0.7, 0, 0.3, 1) 12ms,
-                transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 12ms;
+    transition-property: opacity, transform;
+    transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
+    transition-duration: .5s;
+    /* transition-delay: 12ms; */
   }
   
   .hidden {
     transform: scale3d(0.1, 0.1, 1);
     opacity: 0;
+  }
+  
+  .active {
+    visibility: hidden;
   }
 </style>

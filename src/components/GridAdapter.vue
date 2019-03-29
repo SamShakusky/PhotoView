@@ -15,14 +15,15 @@
             :description="photo.description"
             :signal="props.signal"
             :height="300"
-            :hidden="activeItem.id && photo.id !== activeItem.id"
+            :hidden="activeItemVisible && photo.id !== activeItem.id"
+            :active="activeItem.id && photo.id === activeItem.id"
             @click="hideItems"
           />
         </template>
       </GridItem>
     </GridContainer>
     <Lightbox
-      :active="!! activeItem.id"
+      :active="activeItemVisible"
       :item="activeItem"
       :grid-img-rect="imgRect"
       @close="showItems"
@@ -55,6 +56,7 @@ export default {
   data() {
     return {
       activeItem: defaultPhoto,
+      activeItemVisible: false,
       imgRect: {},
     };
   },
@@ -72,11 +74,15 @@ export default {
   methods: {
     hideItems(data) {
       this.activeItem = this.photos.find(photo => photo.id === data.id);
+      this.activeItemVisible = true;
       this.imgRect = data.sizes;
     },
     
     showItems() {
-      this.activeItem = defaultPhoto;
+      this.activeItemVisible = false;
+      setTimeout(() => {
+        this.activeItem = defaultPhoto;
+      }, 600);
     },
   },
 };
