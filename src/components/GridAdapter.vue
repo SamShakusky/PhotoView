@@ -4,6 +4,7 @@
       <GridItem
         v-for="photo in photos"
         :key="photo.id"
+        :active="activeItem.id && photo.id === activeItem.id"
       >
         <template
           slot="item"
@@ -16,18 +17,20 @@
             :signal="props.signal"
             :height="300"
             :hidden="activeItemVisible && photo.id !== activeItem.id"
-            :active="activeItem.id && photo.id === activeItem.id"
+            :active="activeItemVisible && photo.id === activeItem.id"
+            :cliche-rect="clicheRect"
             @click="hideItems"
           />
         </template>
       </GridItem>
+      <Lightbox
+        :active="activeItemVisible"
+        :item="activeItem"
+        :grid-img-rect="imgRect"
+        @close="showItems"
+        @setClicheRect="setClicheRect"
+      />
     </GridContainer>
-    <Lightbox
-      :active="activeItemVisible"
-      :item="activeItem"
-      :grid-img-rect="imgRect"
-      @close="showItems"
-    />
   </div>
 </template>
 
@@ -58,6 +61,7 @@ export default {
       activeItem: defaultPhoto,
       activeItemVisible: false,
       imgRect: {},
+      clicheRect: {},
     };
   },
   
@@ -83,6 +87,10 @@ export default {
       setTimeout(() => {
         this.activeItem = defaultPhoto;
       }, 600);
+    },
+    
+    setClicheRect(data) {
+      this.clicheRect = data;
     },
   },
 };

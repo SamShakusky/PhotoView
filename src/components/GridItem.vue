@@ -2,6 +2,9 @@
   <div
     ref="item"
     class="grid-item"
+    :class="{
+      'active': active,
+    }"
     :style="styleObjItem"
   >
     <div
@@ -21,16 +24,18 @@
 export default {
   name: 'GridItem',
   
+  props: {
+    active: {
+      type: Boolean,
+      default: () => false,
+    },
+  },
+  
   data() {
     return {
       styleObjItem: {},
       styleObjContent: {},
     };
-  },
-  
-  mounted() {
-    // setTimeout(this.getHeight, 3000);
-    // this.getHeight();
   },
   
   methods: {
@@ -56,7 +61,7 @@ export default {
     min-width: 50px;
   }
   
-  .grid-item-content {
-    overflow: hidden;
+  .active {
+    z-index: 101;
   }
 </style>

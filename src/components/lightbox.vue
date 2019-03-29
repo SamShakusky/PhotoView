@@ -25,11 +25,6 @@
           :style="divRect"
         />
       </div>
-      <img
-        :src="item.url"
-        :style="rectStyles"
-        class="img-clone"
-      >
     </div>
     <div class="descr-wrap" />
   </div>
@@ -70,35 +65,10 @@ export default {
   data() {
     return {
       loading: true,
-      computedStyles: {},
     };
   },
   
   computed: {
-    rectStyles: {
-      get() {
-        if (!this.gridImgRect) {
-          return false;
-        }
-        
-        const {
-          left, top, height, width,
-        } = this.gridImgRect;
-        
-        return {
-          left: `${left}px`,
-          top: `${top}px`,
-          height: `${height}px`,
-          width: `${width}px`,
-          ...this.computedStyles,
-        };
-      },
-      
-      set(newVal) {
-        this.computedStyles = newVal;
-      },
-    },
-    
     divRect() {
       if (!this.gridImgRect) {
         return false;
@@ -115,26 +85,12 @@ export default {
   watch: {
     active(newVal) {
       if (!newVal) {
-        this.rectStyles = {
-          transition: 'opacity .1s .5s, transform .5s, heigth .5s, width .5s',
-          opacity: '0',
-        };
         return false;
       }
       
       setTimeout(() => {
         const clicheRect = this.$refs.cliche.getBoundingClientRect();
-        
-        const { x: cX, y: cY } = clicheRect;
-        const { x: gX, y: gY, height: gHeight } = this.gridImgRect;
-        
-        const newX = cX - gX;
-        const newY = cY - gY;
-        const scale = window.innerHeight / gHeight;
-        
-        this.rectStyles = {
-          transform: `translate3d(${newX}px, ${newY}px, 0) scale(${scale})`,
-        };
+        this.$emit('setClicheRect', clicheRect);
       }, 100);
       
       return newVal;
@@ -153,8 +109,8 @@ export default {
     height: 100vh;
     width: 100vw;
     top: 0;
+    left: 0;
     pointer-events: none;
-    /* opacity: 0; */
   }
   
   .lightbox:before {
@@ -164,7 +120,7 @@ export default {
     content: '';
     height: 100%;
     width: 100%;
-    transition: background .4s;
+    transition: background .4s .1s;
   }
   
   .lightbox.active {
@@ -193,13 +149,8 @@ export default {
   }
   
   .photo-wrap {
-    /* background: lightblue; */
     display: flex;
     justify-content: center;
-  }
-  
-  .descr-wrap {
-    /* background: lightcoral; */
   }
   
   .main-wrap {
@@ -233,11 +184,5 @@ export default {
     0% { opacity: 0; }
     99% { opacity: 0; }
     100% { opacity: 1; }
-   }
-   
-   @keyframes cloneImg {
-    0% { opacity: 1; }
-    99% { opacity: 1; }
-    100% { opacity: 0; }
    }
 </style>

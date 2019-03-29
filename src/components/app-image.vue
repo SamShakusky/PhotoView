@@ -66,11 +66,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    clicheRect: {
+      type: [DOMRect, Object],
+      default: () => {},
+    },
   },
   
   data() {
     return {
       loading: true,
+      imgRect: {},
+      computedStyles: {},
     };
   },
   
@@ -82,31 +88,66 @@ export default {
 
       return (this.height / this.width) * 100;
     },
-    style() {
-      // The background color is used as a
-      // placeholder while loading the image.
-      // You can use the dominant color of the
-      // image to improve perceived performance.
-      // See: https://manu.ninja/dominant-colors-for-lazy-loading-images/
-      const style = { backgroundColor: this.backgroundColor };
-
-      if (this.width) style.width = `${this.width}px`;
-
-      // If the image is still loading and an
-      // aspect ratio could be calculated, we
-      // apply the calculated aspect ratio by
-      // using padding top.
-      const applyAspectRatio = this.loading && this.aspectRatio;
-      if (applyAspectRatio) {
-        // Prevent flash of unstyled image
-        // after the image is loaded.
-        style.height = 0;
-        // Scale the image container according
-        // to the aspect ratio.
-        style.paddingTop = `${this.aspectRatio}%`;
+    style: {
+      get() {
+        // The background color is used as a
+        // placeholder while loading the image.
+        // You can use the dominant color of the
+        // image to improve perceived performance.
+        // See: https://manu.ninja/dominant-colors-for-lazy-loading-images/
+        const style = { backgroundColor: this.backgroundColor };
+        
+        if (this.width) style.width = `${this.width}px`;
+        
+        // If the image is still loading and an
+        // aspect ratio could be calculated, we
+        // apply the calculated aspect ratio by
+        // using padding top.
+        const applyAspectRatio = this.loading && this.aspectRatio;
+        if (applyAspectRatio) {
+          // Prevent flash of unstyled image
+          // after the image is loaded.
+          style.height = 0;
+          // Scale the image container according
+          // to the aspect ratio.
+          style.paddingTop = `${this.aspectRatio}%`;
+        }
+        
+        return {
+          ...style,
+          ...this.computedStyles,
+        };
+      },
+      
+      set(newVal) {
+        this.computedStyles = newVal;
+      },
+    },
+  },
+  
+  watch: {
+    clicheRect(rectVal) {
+      if (!this.active) {
+        return false;
       }
-
-      return style;
+      
+      const { x: cX, y: cY } = rectVal;
+      const { x: gX, y: gY, height: gHeight } = this.imgRect;
+      
+      const newX = cX - gX;
+      const newY = cY - gY;
+      const scale = window.innerHeight / gHeight;
+      
+      this.style = {
+        transform: `translate3d(${newX}px, ${newY}px, 0) scale(${scale})`,
+      };
+      
+      return rectVal;
+    },
+    active(newVal) {
+      if (!newVal) {
+        this.style = {};
+      }
     },
   },
   
@@ -147,6 +188,8 @@ export default {
         sizes: e.currentTarget.getBoundingClientRect(),
       };
       
+      this.imgRect = e.currentTarget.getBoundingClientRect();
+      
       this.$emit('click', data);
     },
   },
@@ -160,7 +203,6 @@ export default {
     transition-property: opacity, transform;
     transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
     transition-duration: .5s;
-    /* transition-delay: 12ms; */
   }
   
   .hidden {
@@ -169,6 +211,16 @@ export default {
   }
   
   .active {
-    visibility: hidden;
+    animation: .6s delayedFadeOut;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes delayedFadeOut {
+    99% {
+      visibility: visible;
+    }
+    100% {
+      visibility: hidden;
+    }
   }
 </style>
