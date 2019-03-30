@@ -2,9 +2,6 @@
   <div
     ref="item"
     class="grid-item"
-    :class="{
-      'active': active,
-    }"
     :style="styleObjItem"
   >
     <div
@@ -23,13 +20,6 @@
 <script>
 export default {
   name: 'GridItem',
-  
-  props: {
-    active: {
-      type: Boolean,
-      default: () => false,
-    },
-  },
   
   data() {
     return {
@@ -59,9 +49,5 @@ export default {
   .grid-item {
     min-height: 50px;
     min-width: 50px;
-  }
-  
-  .active {
-    z-index: 101;
   }
 </style>

@@ -17,13 +17,15 @@
     <div class="photo-wrap">
       <div class="main-wrap">
         <img
+          ref="imgPreview"
           :src="item.url"
-          class="img-main"
+          class="img-preview"
         >
-        <div
-          ref="cliche"
-          :style="divRect"
-        />
+        <img
+          :src="item.url"
+          :style="rectStyles"
+          class="img-clone"
+        >
       </div>
     </div>
     <div class="descr-wrap" />
@@ -56,7 +58,7 @@ export default {
       type: Boolean,
       default: () => false,
     },
-    gridImgRect: {
+    cloneRect: {
       type: [DOMRect, Object],
       default: () => undefined,
     },
@@ -65,32 +67,101 @@ export default {
   data() {
     return {
       loading: true,
+      computedStyles: {},
     };
   },
   
   computed: {
     divRect() {
-      if (!this.gridImgRect) {
+      if (!this.cloneRect) {
         return false;
       }
-      const { height, width } = this.gridImgRect;
+      const { height, width } = this.cloneRect;
       
       return {
         height: `${height}px`,
         width: `${width}px`,
       };
     },
+    
+    rectStyles: {
+      get() {
+        if (!this.cloneRect) {
+          return false;
+        }
+        
+        const {
+          left, top, height, width,
+        } = this.cloneRect;
+        
+        return {
+          left: `${left}px`,
+          top: `${top}px`,
+          height: `${height}px`,
+          width: `${width}px`,
+          ...this.computedStyles,
+        };
+      },
+      
+      set(newVal) {
+        this.computedStyles = newVal;
+      },
+    },
   },
   
   watch: {
     active(newVal) {
       if (!newVal) {
+        this.rectStyles = null;
         return false;
       }
       
       setTimeout(() => {
-        const clicheRect = this.$refs.cliche.getBoundingClientRect();
-        this.$emit('setClicheRect', clicheRect);
+        const { imgPreview } = this.$refs;
+        const imgPreviewRect = imgPreview.getBoundingClientRect();
+        
+        const {
+          x: pX, y: pY, width: pWidth, height: pHeight,
+        } = imgPreviewRect;
+        const {
+          x: cX, y: cY, width: cWidth, height: cHeight,
+        } = this.cloneRect;
+        
+        // Getting translate value
+        const pCenter = {
+          x: pX + pWidth / 2,
+          y: pY + pHeight / 2,
+        };
+        
+        const cCenter = {
+          x: cX + cWidth / 2,
+          y: cY + cHeight / 2,
+        };
+        
+        const сenterShift = {
+          x: pCenter.x - cCenter.x,
+          y: pCenter.y - cCenter.y,
+        };
+        
+        const translateValue = `${сenterShift.x}px, ${сenterShift.y}px, 0`;
+        
+        // Getting scaling factor
+        const aspectRatio = imgPreview.naturalWidth / imgPreview.naturalHeight;
+        const containedHeight = pWidth / aspectRatio;
+        
+        const diffRatio = pHeight / cHeight;
+        const containedRatio = containedHeight / cHeight;
+        
+        const tooWide = cWidth * diffRatio > window.innerWidth / 2;
+        
+        // if the scaled clone width is too wide (wider than half of the window),
+        // we should use contained image's true height to get the scaling factor.
+        const scalingFactor = tooWide ? containedRatio : diffRatio;
+        
+        this.rectStyles = {
+          transform: `translate3d(${translateValue})
+                      scale(${scalingFactor})`,
+        };
       }, 100);
       
       return newVal;
@@ -111,6 +182,7 @@ export default {
     top: 0;
     left: 0;
     pointer-events: none;
+    opacity: 0;
   }
   
   .lightbox:before {
@@ -132,9 +204,14 @@ export default {
     background: white;
   }
   
-  .lightbox.active .img-main {
-    animation: mainImg .6s;
+  .lightbox.active .img-preview {
+    animation: previewFadeIn .6s;
     opacity: 1;
+  }
+  
+  .lightbox.active .img-clone {
+    animation: cloneFadeOut .6s;
+    animation-fill-mode: forwards;
   }
   
   .close-btn {
@@ -156,6 +233,7 @@ export default {
   .main-wrap {
     position: relative;
     z-index: 1;
+    flex: 1;
   }
   
   .main-wrap > div {
@@ -165,10 +243,13 @@ export default {
     transform: translate(-50%, -50%);
   }
   
-  .img-main {
+  .img-preview {
     object-fit: contain;
     height: 100%;
+    width: 100%;
     opacity: 0;
+    z-index: 1;
+    position: relative;
   }
   
   .img-clone {
@@ -180,9 +261,14 @@ export default {
     filter: grayscale();
   }
   
-  @keyframes mainImg {
+  @keyframes previewFadeIn {
     0% { opacity: 0; }
     99% { opacity: 0; }
     100% { opacity: 1; }
-   }
+  }
+  
+  @keyframes cloneFadeOut {
+    99% { opacity: 1; }
+    100% { opacity: 0; }
+  }
 </style>

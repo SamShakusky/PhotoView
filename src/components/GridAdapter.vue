@@ -4,7 +4,6 @@
       <GridItem
         v-for="photo in photos"
         :key="photo.id"
-        :active="activeItem.id && photo.id === activeItem.id"
       >
         <template
           slot="item"
@@ -16,19 +15,17 @@
             :description="photo.description"
             :signal="props.signal"
             :height="300"
-            :hidden="activeItemVisible && photo.id !== activeItem.id"
-            :active="activeItemVisible && photo.id === activeItem.id"
-            :cliche-rect="clicheRect"
-            @click="hideItems"
+            :hidden="!!activeItem.id"
+            :active="activeItem.id && photo.id === activeItem.id"
+            @click="showPreview"
           />
         </template>
       </GridItem>
       <Lightbox
-        :active="activeItemVisible"
+        :active="!!activeItem.id"
         :item="activeItem"
-        :grid-img-rect="imgRect"
-        @close="showItems"
-        @setClicheRect="setClicheRect"
+        :clone-rect="cloneRect"
+        @close="hidePreview"
       />
     </GridContainer>
   </div>
@@ -59,9 +56,7 @@ export default {
   data() {
     return {
       activeItem: defaultPhoto,
-      activeItemVisible: false,
-      imgRect: {},
-      clicheRect: {},
+      cloneRect: {},
     };
   },
   
@@ -76,21 +71,13 @@ export default {
   },
   
   methods: {
-    hideItems(data) {
-      this.activeItem = this.photos.find(photo => photo.id === data.id);
-      this.activeItemVisible = true;
-      this.imgRect = data.sizes;
+    showPreview(activeId, imgRect) {
+      this.activeItem = this.photos.find(photo => photo.id === activeId);
+      this.cloneRect = imgRect;
     },
     
-    showItems() {
-      this.activeItemVisible = false;
-      setTimeout(() => {
-        this.activeItem = defaultPhoto;
-      }, 600);
-    },
-    
-    setClicheRect(data) {
-      this.clicheRect = data;
+    hidePreview() {
+      this.activeItem = defaultPhoto;
     },
   },
 };

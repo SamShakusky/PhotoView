@@ -66,17 +66,11 @@ export default {
       type: Boolean,
       default: false,
     },
-    clicheRect: {
-      type: [DOMRect, Object],
-      default: () => {},
-    },
   },
   
   data() {
     return {
       loading: true,
-      imgRect: {},
-      computedStyles: {},
     };
   },
   
@@ -88,66 +82,31 @@ export default {
 
       return (this.height / this.width) * 100;
     },
-    style: {
-      get() {
-        // The background color is used as a
-        // placeholder while loading the image.
-        // You can use the dominant color of the
-        // image to improve perceived performance.
-        // See: https://manu.ninja/dominant-colors-for-lazy-loading-images/
-        const style = { backgroundColor: this.backgroundColor };
+    style() {
+      // The background color is used as a
+      // placeholder while loading the image.
+      // You can use the dominant color of the
+      // image to improve perceived performance.
+      // See: https://manu.ninja/dominant-colors-for-lazy-loading-images/
+      const style = { backgroundColor: this.backgroundColor };
         
-        if (this.width) style.width = `${this.width}px`;
+      if (this.width) style.width = `${this.width}px`;
         
-        // If the image is still loading and an
-        // aspect ratio could be calculated, we
-        // apply the calculated aspect ratio by
-        // using padding top.
-        const applyAspectRatio = this.loading && this.aspectRatio;
-        if (applyAspectRatio) {
-          // Prevent flash of unstyled image
-          // after the image is loaded.
-          style.height = 0;
-          // Scale the image container according
-          // to the aspect ratio.
-          style.paddingTop = `${this.aspectRatio}%`;
-        }
-        
-        return {
-          ...style,
-          ...this.computedStyles,
-        };
-      },
-      
-      set(newVal) {
-        this.computedStyles = newVal;
-      },
-    },
-  },
-  
-  watch: {
-    clicheRect(rectVal) {
-      if (!this.active) {
-        return false;
+      // If the image is still loading and an
+      // aspect ratio could be calculated, we
+      // apply the calculated aspect ratio by
+      // using padding top.
+      const applyAspectRatio = this.loading && this.aspectRatio;
+      if (applyAspectRatio) {
+        // Prevent flash of unstyled image
+        // after the image is loaded.
+        style.height = 0;
+        // Scale the image container according
+        // to the aspect ratio.
+        style.paddingTop = `${this.aspectRatio}%`;
       }
-      
-      const { x: cX, y: cY } = rectVal;
-      const { x: gX, y: gY, height: gHeight } = this.imgRect;
-      
-      const newX = cX - gX;
-      const newY = cY - gY;
-      const scale = window.innerHeight / gHeight;
-      
-      this.style = {
-        transform: `translate3d(${newX}px, ${newY}px, 0) scale(${scale})`,
-      };
-      
-      return rectVal;
-    },
-    active(newVal) {
-      if (!newVal) {
-        this.style = {};
-      }
+        
+      return style;
     },
   },
   
@@ -171,10 +130,6 @@ export default {
     // element of our component.
     const observer = lozad(this.$el, {
       loaded: (el) => {
-        // el.onload = function () {
-        //   console.log(el);
-        //   this.signal(el);
-        // };
         onLoad(el, () => this.signal(el));
       },
     });
@@ -183,14 +138,9 @@ export default {
   
   methods: {
     click(e) {
-      const data = {
-        id: this.id,
-        sizes: e.currentTarget.getBoundingClientRect(),
-      };
+      const imgRect = e.currentTarget.getBoundingClientRect();
       
-      this.imgRect = e.currentTarget.getBoundingClientRect();
-      
-      this.$emit('click', data);
+      this.$emit('click', this.id, imgRect);
     },
   },
 };
@@ -211,16 +161,6 @@ export default {
   }
   
   .active {
-    animation: .6s delayedFadeOut;
-    animation-fill-mode: forwards;
-  }
-  
-  @keyframes delayedFadeOut {
-    99% {
-      visibility: visible;
-    }
-    100% {
-      visibility: hidden;
-    }
+    visibility: hidden;
   }
 </style>
