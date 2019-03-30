@@ -28,7 +28,14 @@
         >
       </div>
     </div>
-    <div class="descr-wrap" />
+    <div class="descr-wrap">
+      <h2 class="photo-title">
+        {{ photoTitle }}
+      </h2>
+      <p class="photo-descr">
+        {{ photoDescr }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -50,9 +57,7 @@ export default {
   props: {
     item: {
       type: Object,
-      default: () => ({
-        url: null,
-      }),
+      default: () => {},
     },
     active: {
       type: Boolean,
@@ -106,6 +111,22 @@ export default {
       set(newVal) {
         this.computedStyles = newVal;
       },
+    },
+    
+    photoTitle() {
+      if (!this.item.id) {
+        return false;
+      }
+      
+      return `Photo ${this.item.id.slice(-4)}`;
+    },
+    
+    photoDescr() {
+      if (!this.item.id) {
+        return false;
+      }
+      
+      return this.item.description;
     },
   },
   
@@ -193,6 +214,7 @@ export default {
     height: 100%;
     width: 100%;
     transition: background .4s .1s;
+    z-index: -1;
   }
   
   .lightbox.active {
@@ -209,9 +231,27 @@ export default {
     opacity: 1;
   }
   
+  @keyframes previewFadeIn {
+    0% { opacity: 0; }
+    99% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
   .lightbox.active .img-clone {
     animation: cloneFadeOut .6s;
     animation-fill-mode: forwards;
+  }
+  
+  @keyframes cloneFadeOut {
+    99% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  
+  .lightbox.active .photo-title,
+  .lightbox.active .photo-descr {
+    opacity: 1;
+    transform: translateY(0);
   }
   
   .close-btn {
@@ -234,6 +274,7 @@ export default {
     position: relative;
     z-index: 1;
     flex: 1;
+    padding: 0 12px;
   }
   
   .main-wrap > div {
@@ -258,17 +299,35 @@ export default {
     top: 0;
     transition: transform .5s, heigth .5s, width .5s;
     object-fit: contain;
-    filter: grayscale();
+    /* filter: grayscale(); */
   }
   
-  @keyframes previewFadeIn {
-    0% { opacity: 0; }
-    99% { opacity: 0; }
-    100% { opacity: 1; }
+  .descr-wrap {
+    padding: 0 32px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
   }
   
-  @keyframes cloneFadeOut {
-    99% { opacity: 1; }
-    100% { opacity: 0; }
+  .photo-title {
+    font-size: 2.7rem;
+    font-weight: normal;
+    line-height: normal;
+    transition-delay: .4s;
+  }
+  
+  .photo-descr {
+    font-size: 1.6rem;
+    margin: 1.6rem 0;
+    transition-delay: .5s;
+  }
+  
+  .photo-title,
+  .photo-descr {
+    transition-property: opacity, transform;
+    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+    transition-duration: .6s;
+    opacity: 0;
+    transform: translateY(30px);
   }
 </style>

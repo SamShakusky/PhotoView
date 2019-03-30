@@ -153,6 +153,7 @@ export default {
     transition-property: opacity, transform;
     transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
     transition-duration: .5s;
+    cursor: pointer;
   }
   
   .hidden {
