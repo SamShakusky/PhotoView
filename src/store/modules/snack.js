@@ -1,4 +1,4 @@
-const photoModule = {
+const snackModule = {
   namespaced: true,
   
   state: {
@@ -20,4 +20,4 @@ const photoModule = {
   /* eslint-enable no-param-reassign */
 };
 
-export default photoModule;
+export default snackModule;

@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header :class="`page-${currentPage}`">
     <h1>The App</h1>
     <nav id="nav">
       <router-link to="/">
@@ -18,6 +18,12 @@
 <script>
 export default {
   name: 'Header',
+  props: {
+    currentPage: {
+      type: String,
+      default: '/',
+    },
+  },
 };
 </script>
 
@@ -29,6 +35,10 @@ export default {
     background: steelblue;
     color: white;
     align-items: center;
+  }
+  
+  .page-login {
+    display: none;
   }
   
   nav {

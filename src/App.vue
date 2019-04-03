@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Header />
+    <Header :current-page="currentPage" />
     <router-view />
     <SnackAdapter />
   </v-app>
@@ -17,6 +17,11 @@ export default {
     VApp,
     Header,
     SnackAdapter,
+  },
+  computed: {
+    currentPage() {
+      return this.$route.name;
+    },
   },
 };
 </script>
