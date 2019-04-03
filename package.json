@@ -11,6 +11,7 @@
     "@mdi/font": "^3.5.95",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "axios": "^0.18.0",
+    "jwt-decode": "^2.2.0",
     "lozad": "^1.9.0",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",
