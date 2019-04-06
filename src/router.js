@@ -42,6 +42,18 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: Auth,
+      beforeEnter: (to, from, next) => {
+        store.dispatch('auth/inspectToken')
+          .then((isValid) => {
+            if (isValid) {
+              return next({
+                path: '/admin',
+              });
+            }
+            
+            return next();
+          });
+      },
     },
     {
       path: '*',
