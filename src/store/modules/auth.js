@@ -1,5 +1,5 @@
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
+// import jwtDecode from 'jwt-decode';
 
 const authModule = {
   namespaced: true,
@@ -29,9 +29,11 @@ const authModule = {
   
   actions: {
     obtainToken(context, userData) {
-      axios.post(context.state.endpoints.obtainToken, userData)
+      const result = axios.post(context.state.endpoints.obtainToken, userData)
         .then((response) => {
           context.commit('updateToken', response.data.token);
+          
+          return true;
         })
         .catch(() => {
           const snackData = {
@@ -39,7 +41,11 @@ const authModule = {
             color: 'error',
           };
           context.commit('snack/toggleSnack', snackData, { root: true });
+          
+          return false;
         });
+      
+      return result;
     },
     
     refreshToken(context) {
@@ -61,9 +67,9 @@ const authModule = {
     
     inspectToken(context) {
       const { token } = context.state;
-      console.log(token);
+      // console.log(token);
       if (token) {
-        const decoded = jwtDecode(token);
+        // const decoded = jwtDecode(token);
         // const { exp } = decoded;
         // const { orig_iat } = decode;
         // console.log(decoded);
@@ -87,17 +93,23 @@ const authModule = {
         },
         error: {
           text: 'Couldn\'t create user',
-          color: 'success',
+          color: 'error',
         },
       };
       
-      axios.post(context.state.endpoints.manageUsers, userData)
+      const result = axios.post(context.state.endpoints.manageUsers, userData)
         .then(() => {
           context.commit('snack/toggleSnack', snackData.success, { root: true });
+          
+          return true;
         })
         .catch(() => {
           context.commit('snack/toggleSnack', snackData.error, { root: true });
+          
+          return false;
         });
+        
+      return result;
     },
   },
 };

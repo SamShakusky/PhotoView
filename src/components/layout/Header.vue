@@ -1,10 +1,9 @@
 <template>
-  <header :class="`page-${currentPage}`">
-    <h1>The App</h1>
+  <header :class="`header page-${currentPage}`">
+    <router-link to="/">
+      <h1>The App</h1>
+    </router-link>
     <nav id="nav">
-      <router-link to="/">
-        Home
-      </router-link>
       <router-link to="/admin">
         Admin
       </router-link>
@@ -29,7 +28,7 @@ export default {
 
 
 <style scoped>
-  header {
+  .header {
     display: flex;
     padding: 12px;
     background: steelblue;
@@ -38,6 +37,14 @@ export default {
   }
   
   .page-login {
+    background: #fafafa;
+  }
+  
+  .page-login h1 {
+    color: #212121;
+  }
+  
+  .page-login nav {
     display: none;
   }
   

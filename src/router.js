@@ -20,15 +20,17 @@ const router = new Router({
       path: '/admin',
       name: 'admin',
       component: Admin,
-      redirect(to) {
-        console.log(to);
-        console.log(this.currentRoute);
+      beforeEnter: (to, from, next) => {
         if (!store.state.auth.token) {
-          store.dispatch('auth/inspectToken').then(resp => console.log(resp));
-          return 'login';
+          // store.dispatch('auth/inspectToken').then(resp => console.log(resp));
+          next({
+            path: '/login',
+          });
+          
+          return;
         }
         
-        return 'admin';
+        next();
       },
     },
     {

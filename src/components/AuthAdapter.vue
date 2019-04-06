@@ -1,15 +1,37 @@
 <template>
-  <div class="auth-form">
-    <p>auth</p>
-  </div>
+  <AuthForm
+    @sendLoginData="obtainToken"
+    @sendSignupData="createUser"
+  />
 </template>
 
 <script>
+import AuthForm from './AuthForm';
+
 export default {
   name: 'AuthAdapter',
+  components: {
+    AuthForm,
+  },
   
-  created() {
-    // this.$store.dispatch('auth/inspectToken');
+  methods: {
+    obtainToken(userData) {
+      this.$store.dispatch('auth/obtainToken', userData)
+        .then((succesfull) => {
+          if (succesfull) {
+            this.$router.push('admin');
+          }
+        });
+    },
+    
+    createUser(userData) {
+      this.$store.dispatch('auth/createUser', userData)
+        .then((succesfull) => {
+          if (succesfull) {
+            this.obtainToken(userData);
+          }
+        });
+    },
   },
 };
 </script>
