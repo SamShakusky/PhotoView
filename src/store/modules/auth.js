@@ -72,8 +72,16 @@ const authModule = {
         const decoded = jwtDecode(token);
         const { exp } = decoded;
         
+        // less than 30 minutes until expiration
+        const isAlmostExpired = (exp - Date.now() / 1000) < 30 * 60;
+        
+        // check if token has not expired
         if (exp > (Date.now() / 1000)) {
-          context.dispatch('refreshToken');
+          // refresh token if almost expired
+          if (isAlmostExpired) {
+            context.dispatch('refreshToken');
+          }
+          
           return true;
         }
       }
