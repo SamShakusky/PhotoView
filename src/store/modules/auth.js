@@ -114,4 +114,6 @@ const authModule = {
   },
 };
 
+axios.defaults.headers.common.Authorization = `JWT ${authModule.state.token}`;
+
 export default authModule;
