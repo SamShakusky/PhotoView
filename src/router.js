@@ -21,16 +21,16 @@ const router = new Router({
       name: 'admin',
       component: Admin,
       beforeEnter: (to, from, next) => {
-        if (!store.state.auth.token) {
-          // store.dispatch('auth/inspectToken').then(resp => console.log(resp));
-          next({
-            path: '/login',
+        store.dispatch('auth/inspectToken')
+          .then((isValid) => {
+            if (isValid) {
+              return next();
+            }
+            
+            return next({
+              path: '/login',
+            });
           });
-          
-          return;
-        }
-        
-        next();
       },
     },
     {

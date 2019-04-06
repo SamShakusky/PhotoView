@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 
 const authModule = {
   namespaced: true,
@@ -16,13 +16,14 @@ const authModule = {
   /* eslint-disable no-param-reassign */
   mutations: {
     updateToken(state, newToken) {
-      localStorage.setItem('t', newToken);
       state.token = newToken;
+      axios.defaults.headers.common.Authorization = `JWT ${state.token}`;
+      localStorage.setItem('t', newToken);
     },
     
     removeToken(state) {
-      localStorage.removeItem('t');
       state.token = null;
+      localStorage.removeItem('t');
     },
   },
   /* eslint-enable no-param-reassign */
@@ -67,19 +68,14 @@ const authModule = {
     
     inspectToken(context) {
       const { token } = context.state;
-      // console.log(token);
       if (token) {
-        // const decoded = jwtDecode(token);
-        // const { exp } = decoded;
-        // const { orig_iat } = decode;
-        // console.log(decoded);
-        // if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - orig_iat < 628200) {
-        //   // this.dispatch('refreshToken');
-        // } else if (exp - (Date.now() / 1000) < 1800) {
-        //   // DO NOTHING, DO NOT REFRESH
-        // } else {
-        //
-        // }
+        const decoded = jwtDecode(token);
+        const { exp } = decoded;
+        
+        if (exp > (Date.now() / 1000)) {
+          context.dispatch('refreshToken');
+          return true;
+        }
       }
       
       return false;
