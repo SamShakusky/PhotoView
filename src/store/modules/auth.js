@@ -17,7 +17,7 @@ const authModule = {
   mutations: {
     updateToken(state, newToken) {
       state.token = newToken;
-      axios.defaults.headers.common.Authorization = `JWT ${state.token}`;
+      axios.defaults.headers.common.Authorization = newToken ? `JWT ${newToken}` : '';
       localStorage.setItem('t', newToken);
     },
     
@@ -118,6 +118,6 @@ const authModule = {
   },
 };
 
-axios.defaults.headers.common.Authorization = `JWT ${authModule.state.token}`;
+axios.defaults.headers.common.Authorization = authModule.state.token ? `JWT ${authModule.state.token}` : '';
 
 export default authModule;
