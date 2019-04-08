@@ -15,6 +15,7 @@
       v-model="password"
       :rules="passwordRules"
       label="Password"
+      type="password"
       required
     />
     
