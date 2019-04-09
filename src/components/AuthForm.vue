@@ -91,7 +91,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .v-form {
     padding: 10px 24px;
     min-width: 300px;
@@ -102,9 +102,8 @@ export default {
   
   .v-btn {
     margin: 18px 0;
-  }
-  
-  .v-btn:last-of-type {
-    margin-top: 0;
+    &:last-of-type {
+      margin-top: 0;
+    }
   }
 </style>

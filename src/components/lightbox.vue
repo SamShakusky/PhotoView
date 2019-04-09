@@ -200,7 +200,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style lang="scss" scoped>
   .lightbox {
     position: fixed;
     z-index: 100;
@@ -211,76 +211,75 @@ export default {
     left: 0;
     pointer-events: none;
     opacity: 0;
-  }
-  
-  .lightbox:before {
-    position: absolute;
-    left: 0;
-    top: 0;
-    content: '';
-    height: 100%;
-    width: 100%;
-    transition: background .4s .1s;
-    z-index: -1;
-  }
-  
-  .lightbox.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  
-  .lightbox.active:before {
-    background: white;
-  }
-  
-  .lightbox.active .img-preview {
-    animation: previewFadeIn .6s;
-    opacity: 1;
-  }
-  
-  @keyframes previewFadeIn {
-    0% { opacity: 0; }
-    99% { opacity: 0; }
-    100% { opacity: 1; }
-  }
-  
-  .lightbox.active .img-clone {
-    animation: cloneFadeOut .6s;
-    animation-fill-mode: forwards;
-  }
-  
-  @keyframes cloneFadeOut {
-    99% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-  
-  
-  .lightbox.active .photo-title,
-  .lightbox.active .photo-descr {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  .lightbox.fadeOut {
-    opacity: 0;
-    transition-property: opacity;
-    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-    transition-duration: .5s;
-  }
-  
-  .lightbox.fadeOut .photo-wrap,
-  .lightbox.fadeOut .descr-wrap {
-    transition-property: transform, opacity;
-    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-    transition-duration: .5s;
-  }
-  
-  .lightbox.fadeOut .photo-wrap {
-    transform: translateY(-60px);
-  }
-  
-  .lightbox.fadeOut .descr-wrap {
-    transform: translateY(60px);
+    
+    &:before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      content: '';
+      height: 100%;
+      width: 100%;
+      transition: background .4s .1s;
+      z-index: -1;
+    }
+    
+    &.active {
+      opacity: 1;
+      pointer-events: auto;
+      
+      &:before {
+        background: white;
+      }
+      
+      .img-preview {
+        animation: previewFadeIn .6s;
+        opacity: 1;
+      }
+      
+      .img-clone {
+        animation: cloneFadeOut .6s;
+        animation-fill-mode: forwards;
+      }
+      
+      @keyframes previewFadeIn {
+        0% { opacity: 0; }
+        99% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+      
+      @keyframes cloneFadeOut {
+        99% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+      
+      .photo-title,
+      .photo-descr {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    &.fadeOut {
+      opacity: 0;
+      transition-property: opacity;
+      transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+      transition-duration: .5s;
+      
+      .photo-wrap,
+      .descr-wrap {
+        transition-property: transform, opacity;
+        transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+        transition-duration: .5s;
+      }
+      
+      .photo-wrap {
+        transform: translateY(-60px);
+      }
+      
+      .descr-wrap {
+        transform: translateY(60px);
+      }
+    }
   }
   
   .close-btn {
@@ -306,13 +305,6 @@ export default {
     padding: 0 12px;
   }
   
-  .main-wrap > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
   .img-preview {
     object-fit: contain;
     height: 100%;
@@ -328,7 +320,6 @@ export default {
     top: 0;
     transition: transform .5s, heigth .5s, width .5s;
     object-fit: contain;
-    /* filter: grayscale(); */
   }
   
   .descr-wrap {
@@ -336,6 +327,15 @@ export default {
     display: flex;
     justify-content: center;
     flex-direction: column;
+  }
+  
+  .photo-title,
+  .photo-descr {
+    transition-property: opacity, transform;
+    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+    transition-duration: .6s;
+    opacity: 0;
+    transform: translateY(30px);
   }
   
   .photo-title {
@@ -349,14 +349,5 @@ export default {
     font-size: 1.6rem;
     margin: 1.6rem 0;
     transition-delay: .5s;
-  }
-  
-  .photo-title,
-  .photo-descr {
-    transition-property: opacity, transform;
-    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-    transition-duration: .6s;
-    opacity: 0;
-    transform: translateY(30px);
   }
 </style>

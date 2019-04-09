@@ -138,7 +138,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .dialog-overlay {
     background: rgba(0, 0, 0, .4);
     height: 100vh;
@@ -149,11 +149,11 @@ export default {
     top: 0;
     transition: .2s opacity;
     width: 100vw;
-  }
-  
-  .dialog-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
+    
+    &.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
   
   .v-card {
@@ -168,8 +168,9 @@ export default {
     top: 18px;
     right: 24px;
     display: none;
-  }
-  .delete-btn.visible {
-    display: inline-flex;
+    
+    &.visible {
+      display: inline-flex;
+    }
   }
 </style>

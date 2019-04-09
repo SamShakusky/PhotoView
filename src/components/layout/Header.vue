@@ -27,34 +27,34 @@ export default {
 </script>
 
 
-<style scoped>
+<style lang="scss" scoped>
   .header {
     display: flex;
     padding: 12px;
     background: steelblue;
     color: white;
     align-items: center;
+    
+    a {
+      color: white;
+      margin-right: 12px;
+      text-decoration: none;
+    }
   }
   
   .page-login {
     background: #fafafa;
-  }
-  
-  .page-login h1 {
-    color: #212121;
-  }
-  
-  .page-login nav {
-    display: none;
+    
+    h1 {
+      color: #212121;
+    }
+    
+    nav {
+      display: none;
+    }
   }
   
   nav {
     margin-left: 32px;
-  }
-  
-  header a {
-    color: white;
-    margin-right: 12px;
-    text-decoration: none;
   }
 </style>
