@@ -1,7 +1,10 @@
 <template>
   <div
     class="lightbox"
-    :class="{'active': active}"
+    :class="{
+      'active': active,
+      'fadeOut': fadeOut,
+    }"
   >
     <v-btn
       flat
@@ -60,6 +63,10 @@ export default {
       default: () => {},
     },
     active: {
+      type: Boolean,
+      default: () => false,
+    },
+    fadeOut: {
       type: Boolean,
       default: () => false,
     },
@@ -252,6 +259,28 @@ export default {
   .lightbox.active .photo-descr {
     opacity: 1;
     transform: translateY(0);
+  }
+  
+  .lightbox.fadeOut {
+    opacity: 0;
+    transition-property: opacity;
+    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+    transition-duration: .5s;
+  }
+  
+  .lightbox.fadeOut .photo-wrap,
+  .lightbox.fadeOut .descr-wrap {
+    transition-property: transform, opacity;
+    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+    transition-duration: .5s;
+  }
+  
+  .lightbox.fadeOut .photo-wrap {
+    transform: translateY(-60px);
+  }
+  
+  .lightbox.fadeOut .descr-wrap {
+    transform: translateY(60px);
   }
   
   .close-btn {

@@ -23,6 +23,7 @@
       </GridItem>
       <Lightbox
         :active="!!activeItem.id"
+        :fade-out="fadeOut"
         :item="activeItem"
         :clone-rect="cloneRect"
         @close="hidePreview"
@@ -57,6 +58,7 @@ export default {
     return {
       activeItem: defaultPhoto,
       cloneRect: {},
+      fadeOut: false,
     };
   },
   
@@ -77,7 +79,12 @@ export default {
     },
     
     hidePreview() {
-      this.activeItem = defaultPhoto;
+      this.fadeOut = true;
+      
+      setTimeout(() => {
+        this.fadeOut = false;
+        this.activeItem = defaultPhoto;
+      }, 100);
     },
   },
 };
