@@ -3,7 +3,7 @@
     class="lightbox"
     :class="{
       'active': active,
-      'fadeOut': fadeOut,
+      'fade-out': fadeOut,
     }"
   >
     <v-btn
@@ -202,24 +202,24 @@ export default {
 
 <style lang="scss" scoped>
   .lightbox {
-    position: fixed;
-    z-index: 100;
     display: flex;
     height: 100vh;
-    width: 100vw;
-    top: 0;
     left: 0;
-    pointer-events: none;
     opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 100;
     
     &:before {
-      position: absolute;
-      left: 0;
-      top: 0;
+      @include transition(background .4s .1s);
       content: '';
       height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
       width: 100%;
-      transition: background .4s .1s;
       z-index: -1;
     }
     
@@ -228,7 +228,7 @@ export default {
       pointer-events: auto;
       
       &:before {
-        background: white;
+        background: $light;
       }
       
       .img-preview {
@@ -259,17 +259,13 @@ export default {
       }
     }
     
-    &.fadeOut {
+    &.fade-out {
+      @include transitionCubic(opacity .5s);
       opacity: 0;
-      transition-property: opacity;
-      transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-      transition-duration: .5s;
       
       .photo-wrap,
       .descr-wrap {
-        transition-property: transform, opacity;
-        transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-        transition-duration: .5s;
+        @include transitionCubic(opacity .5s, transform .5s);
       }
       
       .photo-wrap {
@@ -299,41 +295,39 @@ export default {
   }
   
   .main-wrap {
-    position: relative;
-    z-index: 1;
     flex: 1;
     padding: 0 12px;
+    position: relative;
+    z-index: 1;
   }
   
   .img-preview {
-    object-fit: contain;
     height: 100%;
-    width: 100%;
+    object-fit: contain;
     opacity: 0;
-    z-index: 1;
     position: relative;
+    width: 100%;
+    z-index: 1;
   }
   
   .img-clone {
-    position: absolute;
+    @include transition(transform .5s, heigth .5s, width .5s);
     left: 0;
-    top: 0;
-    transition: transform .5s, heigth .5s, width .5s;
     object-fit: contain;
+    position: absolute;
+    top: 0;
   }
   
   .descr-wrap {
-    padding: 0 32px;
     display: flex;
-    justify-content: center;
     flex-direction: column;
+    justify-content: center;
+    padding: 0 32px;
   }
   
   .photo-title,
   .photo-descr {
-    transition-property: opacity, transform;
-    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-    transition-duration: .6s;
+    @include transitionCubic(opacity .6s, transform .6s);
     opacity: 0;
     transform: translateY(30px);
   }

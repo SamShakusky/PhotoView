@@ -93,11 +93,11 @@ export default {
 
 <style lang="scss" scoped>
   .v-form {
-    padding: 10px 24px;
-    min-width: 300px;
     display: flex;
     flex-direction: column;
     margin-top: 50px;
+    min-width: 300px;
+    padding: 10px 24px;
   }
   
   .v-btn {

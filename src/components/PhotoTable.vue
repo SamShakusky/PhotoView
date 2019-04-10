@@ -107,14 +107,14 @@ export default {
   }
   
   span {
+    display: block;
     height: 100px;
     width: 100px;
-    display: block;
   }
   
   img {
-    object-fit: contain;
     height: 100%;
+    object-fit: contain;
     width: 100px;
   }
 </style>

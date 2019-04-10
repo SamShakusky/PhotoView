@@ -148,17 +148,15 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .AppImage {
-    transition-property: opacity, transform;
-    transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
-    transition-duration: .5s;
+    @include transitionCubicPlus(opacity .5s, transform .5s);
     cursor: pointer;
   }
   
   .hidden {
-    transform: scale3d(0.1, 0.1, 1);
     opacity: 0;
+    transform: scale3d(0.1, 0.1, 1);
   }
   
   .active {

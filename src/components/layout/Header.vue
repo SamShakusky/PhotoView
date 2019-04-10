@@ -31,22 +31,22 @@ export default {
   .header {
     display: flex;
     padding: 12px;
-    background: steelblue;
-    color: white;
+    background: $main;
+    color: $light;
     align-items: center;
     
     a {
-      color: white;
+      color: $light;
       margin-right: 12px;
       text-decoration: none;
     }
   }
   
   .page-login {
-    background: #fafafa;
+    background: $light;
     
     h1 {
-      color: #212121;
+      color: $dark;
     }
     
     nav {

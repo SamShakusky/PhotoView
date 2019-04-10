@@ -140,14 +140,14 @@ export default {
 
 <style lang="scss" scoped>
   .dialog-overlay {
-    background: rgba(0, 0, 0, .4);
+    @include transition(opacity .2s);
+    background: rgba($dark, .4);
     height: 100vh;
     left: 0;
     opacity: 0;
     pointer-events: none;
     position: fixed;
     top: 0;
-    transition: .2s opacity;
     width: 100vw;
     
     &.active {
@@ -165,9 +165,9 @@ export default {
   }
   
   .delete-btn {
-    top: 18px;
-    right: 24px;
     display: none;
+    right: 24px;
+    top: 18px;
     
     &.visible {
       display: inline-flex;
