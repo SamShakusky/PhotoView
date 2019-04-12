@@ -1,5 +1,6 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import { decode } from 'punycode';
 
 const authModule = {
   namespaced: true,
@@ -70,21 +71,27 @@ const authModule = {
       const { token } = context.state;
       if (token) {
         const decoded = jwtDecode(token);
-        const { exp } = decoded;
+        const { exp, orig_iat: origIat } = decoded;
         
-        // less than 30 minutes until expiration
-        const isAlmostExpired = (exp - Date.now() / 1000) < 30 * 60;
-        
-        // check if token has not expired
-        if (exp > (Date.now() / 1000)) {
-          // refresh token if almost expired
-          if (isAlmostExpired) {
-            context.dispatch('refreshToken');
-          }
+        const expired = new Date(exp * 1000);
+        const orig = new Date(origIat * 1000);
+        console.log(decoded);
+        console.log('e', expired.toLocaleString());
+        console.log('i', orig.toLocaleString());
+        console.log('till exp', (expired - Date.now()) / 1000 / 60);
+        console.log('-', exp - (Date.now() / 1000));
+        if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - origIat < 628200) {
+          context.dispatch('refreshToken');
+          return true;
+        }
+        if (exp - (Date.now() / 1000) > 1800) {
+          console.log(2);
           
+          // DO NOTHING, DO NOT REFRESH
           return true;
         }
       }
+      console.log(3);
       
       return false;
     },
