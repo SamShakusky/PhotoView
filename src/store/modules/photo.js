@@ -1,4 +1,7 @@
 import axios from 'axios';
+import authModule from './auth';
+
+const Authorization = authModule.state.token ? `JWT ${authModule.state.token}` : '';
 
 const photoModule = {
   namespaced: true,
@@ -59,6 +62,7 @@ const photoModule = {
         method,
         url: `/api/photo/${photoId}`,
         data: photoData,
+        headers: { Authorization },
       }).then((res) => {
         context.commit('setPhoto', {
           id: photoData.id,
@@ -83,7 +87,7 @@ const photoModule = {
         },
       };
       
-      axios.delete(`/api/photo/${id}/`)
+      axios.delete(`/api/photo/${id}/`, { headers: { Authorization } })
         .then(() => {
           const filteredList = context.state.data.filter(photo => photo.id !== id);
           context.commit('deletePhoto', filteredList);
