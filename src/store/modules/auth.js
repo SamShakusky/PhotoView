@@ -1,6 +1,6 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
-import { decode } from 'punycode';
+// import { decode } from 'punycode';
 
 const authModule = {
   namespaced: true,
@@ -10,6 +10,7 @@ const authModule = {
     endpoints: {
       obtainToken: '/api/token/obtain/',
       refreshToken: '/api/token/refresh/',
+      verifyToken: '/api/token/verify/',
       manageUsers: '/api/users/',
     },
   },
@@ -67,33 +68,49 @@ const authModule = {
         });
     },
     
+    verifyToken(context, token) {
+      const result = axios.post(context.state.endpoints.verifyToken, { token })
+        .then((response) => {
+          if (response.status === 200) {
+            return true;
+          }
+          
+          return false;
+        })
+        .catch(() => false);
+      
+      return result;
+    },
+    
     inspectToken(context) {
       const { token } = context.state;
-      if (token) {
-        const decoded = jwtDecode(token);
-        const { exp, orig_iat: origIat } = decoded;
-        
-        const expired = new Date(exp * 1000);
-        const orig = new Date(origIat * 1000);
-        console.log(decoded);
-        console.log('e', expired.toLocaleString());
-        console.log('i', orig.toLocaleString());
-        console.log('till exp', (expired - Date.now()) / 1000 / 60);
-        console.log('-', exp - (Date.now() / 1000));
-        if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - origIat < 628200) {
-          context.dispatch('refreshToken');
-          return true;
-        }
-        if (exp - (Date.now() / 1000) > 1800) {
-          console.log(2);
+      const result = context.dispatch('verifyToken', token)
+        .then((isValid) => {
+          if (isValid) {
+            const decoded = jwtDecode(token);
+            const { exp } = decoded;
+            
+            // const { exp, orig_iat: origIat } = decoded;
+            // const expired = new Date(exp * 1000);
+            // const orig = new Date(origIat * 1000);
+            // console.log(decoded);
+            // console.log('e', expired.toLocaleString());
+            // console.log('i', orig.toLocaleString());
+            // console.log('till exp', (expired - Date.now()) / 1000 / 60 / 60);
+            
+            // refresh token if less than 60 minutes till expiration
+            if (exp - (Date.now() / 1000) < 60 * 60) {
+              context.dispatch('refreshToken');
+            }
+            
+            return true;
+          }
           
-          // DO NOTHING, DO NOT REFRESH
-          return true;
-        }
-      }
-      console.log(3);
+          return false;
+        })
+        .catch(() => false);
       
-      return false;
+      return result;
     },
     
     createUser: (context, userData) => {
