@@ -3,11 +3,6 @@
     <router-link to="/">
       <h1>The App</h1>
     </router-link>
-    <nav id="nav">
-      <router-link to="/admin">
-        Admin
-      </router-link>
-    </nav>
   </header>
 </template>
 
