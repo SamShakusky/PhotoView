@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/HomePage';
 import Admin from './views/AdminPage';
-import Todo from './views/TodoPage';
 import Auth from './views/AuthPage';
 
 import store from './store';
@@ -32,11 +31,6 @@ const router = new Router({
             });
           });
       },
-    },
-    {
-      path: '/todo',
-      name: 'todo',
-      component: Todo,
     },
     {
       path: '/login',

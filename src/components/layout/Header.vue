@@ -7,9 +7,6 @@
       <router-link to="/admin">
         Admin
       </router-link>
-      <router-link to="/todo">
-        Todo
-      </router-link>
     </nav>
   </header>
 </template>
